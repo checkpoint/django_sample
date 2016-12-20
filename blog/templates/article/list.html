@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">投稿一覧</h1>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>タイトル</th>
+                    <th>コンテンツ</th>
+                    <th>カテゴリ</th>
+                    <th>公開日</th>
+                    <th>状態</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for article in articles %}
+                    <tr>
+                        <td>{{ article.id }}</td>
+                        <td><a href="{% url 'edit_article' blog.id article.id %}">{{ article.title }}</a></td>
+                        <td>{{ article.description }}</td>
+                        <td>{{ article.category }}</td>
+                        <td>{{ article.pub_date }}</td>
+                        <td>
+                            {% if article.is_draft %}
+                                下書き
+                            {% else %}
+                                公開済み
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form action="{% url 'delete_article' blog.id article.id %}" method="post">
+                                {% csrf_token %}
+                                <p><input value="削除する" type="submit"/></p>
+                            </form>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
